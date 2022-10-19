@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 class InputField extends StatefulWidget {
   const InputField({super.key});
 
@@ -10,6 +9,19 @@ class InputField extends StatefulWidget {
 }
 
 class _InputFieldState extends State<InputField> {
+  final emailTextEditingController = TextEditingController();
+  final passwordTextEditingController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  bool _validate = false;
+
+  @override
+  void dispose() {
+    passwordTextEditingController.dispose();
+    emailTextEditingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -31,7 +43,11 @@ class _InputFieldState extends State<InputField> {
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
+
+        //  ************************ ---- form  section ---- ************************ //
+
         child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,10 +89,20 @@ class _InputFieldState extends State<InputField> {
                   ),
                   color: Colors.blueGrey.shade50,
                 ),
-                child: const Center(
-                  child: TextField(
+                child: Center(
+                  child: TextFormField(
+                    controller: emailTextEditingController,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please valid email';
+                      } else if (value.endsWith("@gmail.com") != true) {
+                        return 'Please valid email';
+                      }
+                      return null;
+                    },
                     obscureText: false,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
                       hintText: 'Email',
                       border: InputBorder.none,
@@ -93,10 +119,21 @@ class _InputFieldState extends State<InputField> {
                   ),
                   color: Colors.blueGrey.shade50,
                 ),
-                child: const Center(
-                  child: TextField(
+                child: Center(
+                  child: TextFormField(
+                    keyboardType: TextInputType.visiblePassword,
+                    controller: passwordTextEditingController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter valid passsword';
+                      } else if (value.length < 6) {
+                        return 'password ';
+                      }
+
+                      return null;
+                    },
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 20),
                       hintText: 'Password',
                       border: InputBorder.none,
@@ -125,6 +162,9 @@ class _InputFieldState extends State<InputField> {
               const Spacer(
                 flex: 3,
               ),
+
+              //  ************************ ---- button section ---- ************************ //
+
               CupertinoButton(
                 padding: EdgeInsets.symmetric(
                     vertical: 20, horizontal: width / 2 - 42),
@@ -136,7 +176,20 @@ class _InputFieldState extends State<InputField> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Color(0xff5AE579),
+                          ),
+                        ),
+                        backgroundColor: Colors.white,
+                      ),
+                    );
+                  }
+                },
               ),
               const Spacer(),
             ],
