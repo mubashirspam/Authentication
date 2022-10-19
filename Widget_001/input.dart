@@ -24,7 +24,6 @@ class _InputFieldState extends State<InputField> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).canvasColor,
@@ -93,6 +92,8 @@ class _InputFieldState extends State<InputField> {
                   child: TextFormField(
                     controller: emailTextEditingController,
                     keyboardType: TextInputType.emailAddress,
+                    focusNode: FocusNode(),
+                    autofocus: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please valid email';
@@ -123,6 +124,8 @@ class _InputFieldState extends State<InputField> {
                   child: TextFormField(
                     keyboardType: TextInputType.visiblePassword,
                     controller: passwordTextEditingController,
+                    focusNode: FocusNode(),
+                    autofocus: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter valid passsword';
@@ -165,31 +168,33 @@ class _InputFieldState extends State<InputField> {
 
               //  ************************ ---- button section ---- ************************ //
 
-              CupertinoButton(
-                padding: EdgeInsets.symmetric(
-                    vertical: 20, horizontal: width / 2 - 42),
-                color: const Color(0xff5AE579),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
+              SizedBox(
+                height: 55,
+                width: double.maxFinite,
+                child: CupertinoButton(
+                  color: const Color(0xff5AE579),
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Color(0xff5AE579),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(
+                            child: CircularProgressIndicator(
+                              backgroundColor: Color(0xff5AE579),
+                            ),
                           ),
+                          backgroundColor: Colors.white,
                         ),
-                        backgroundColor: Colors.white,
-                      ),
-                    );
-                  }
-                },
+                      );
+                    }
+                  },
+                ),
               ),
               const Spacer(),
             ],
@@ -199,3 +204,9 @@ class _InputFieldState extends State<InputField> {
     );
   }
 }
+
+
+
+
+
+
