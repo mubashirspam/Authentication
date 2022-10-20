@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
@@ -12,8 +13,6 @@ class _InputFieldState extends State<InputField> {
   final emailTextEditingController = TextEditingController();
   final passwordTextEditingController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  bool _validate = false;
 
   @override
   void dispose() {
@@ -52,112 +51,122 @@ class _InputFieldState extends State<InputField> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
-              Text(
-                "Hey, \nLogin Now.",
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+              RichText(
+                text: const TextSpan(
+                  text: "Hey, \nLogin",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: " Now.",
+                      style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
+
               const SizedBox(
                 height: 30,
               ),
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   text: "if you Are New /",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: const TextStyle(color: Colors.grey, fontSize: 16),
                   children: [
                     TextSpan(
                       text: "  Create New",
-                      style: TextStyle(
-                          color: Colors.black,
+                      style: const TextStyle(
+                          color: Colors.green,
                           fontSize: 16,
                           fontWeight: FontWeight.w500),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => print('Tap Here onTap'),
                     ),
                   ],
                 ),
               ),
               const Spacer(),
-              Container(
-                height: 60,
-                margin: const EdgeInsets.only(top: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    12,
-                  ),
-                  color: Colors.blueGrey.shade50,
-                ),
-                child: Center(
-                  child: TextFormField(
-                    controller: emailTextEditingController,
-                    keyboardType: TextInputType.emailAddress,
-                    focusNode: FocusNode(),
-                    autofocus: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please valid email';
-                      } else if (value.endsWith("@gmail.com") != true) {
-                        return 'Please valid email';
-                      }
-                      return null;
-                    },
-                    obscureText: false,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      hintText: 'Email',
-                      border: InputBorder.none,
-                    ),
-                  ),
+              TextFormField(
+                controller: emailTextEditingController,
+                keyboardType: TextInputType.emailAddress,
+                focusNode: FocusNode(),
+                autofocus: false,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please valid email';
+                  } else if (!RegExp(
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                      .hasMatch(value)) {
+                    return 'Check your email';
+                  }
+                  return null;
+                },
+                obscureText: false,
+                decoration: InputDecoration(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  hintText: 'Email',
+                  fillColor: const Color(0xffECEFF1),
+                  filled: true,
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(12)),
                 ),
               ),
-              Container(
-                height: 60,
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    12,
-                  ),
-                  color: Colors.blueGrey.shade50,
-                ),
-                child: Center(
-                  child: TextFormField(
-                    keyboardType: TextInputType.visiblePassword,
-                    controller: passwordTextEditingController,
-                    focusNode: FocusNode(),
-                    autofocus: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter valid passsword';
-                      } else if (value.length < 6) {
-                        return 'password ';
-                      }
 
-                      return null;
-                    },
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      hintText: 'Password',
-                      border: InputBorder.none,
-                    ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.visiblePassword,
+                controller: passwordTextEditingController,
+                focusNode: FocusNode(),
+                autofocus: false,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter valid passsword';
+                  } else if (value.length < 6) {
+                    return 'password ';
+                  }
+
+                  return null;
+                },
+                obscureText: true,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
                   ),
+                  hintText: 'Password',
+                  fillColor: const Color(0xffECEFF1),
+                  filled: true,
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(12)),
                 ),
               ),
               const SizedBox(
                 height: 10,
               ),
               RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   text: "Forgot Password /",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: const TextStyle(color: Colors.grey, fontSize: 16),
                   children: [
                     TextSpan(
                       text: "  Reset",
-                      style: TextStyle(
-                          color: Colors.black,
+                      style: const TextStyle(
+                          color: Colors.green,
                           fontSize: 16,
                           fontWeight: FontWeight.w500),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => print('Tap Here onTap'),
                     ),
                   ],
                 ),
@@ -204,9 +213,3 @@ class _InputFieldState extends State<InputField> {
     );
   }
 }
-
-
-
-
-
-
